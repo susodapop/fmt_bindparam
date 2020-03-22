@@ -6,6 +6,7 @@
 		<style type="text/css">
 			#btn_find { color: white; background: #333; height: 3em; }
 			#btn_generate { color: black; background: green; height: 3em; }
+			#btn_copy { color: white; background: blue; height: 3em; }
 			#frm_main { width: 80%; max-width: 500px; margin: auto; display: flex; flex-flow: column nowrap; justify-content: center: align-items: center; }
 			.param_wrapper { margin: 1em auto; width: 80%; max-width: 300px; display: flex; flex-flow: row nowrap; justify-content: space-between; }
 		
@@ -24,15 +25,40 @@
 						<label for="p_{{ p }}">{{ p }}</label>
 						<input type="text" name="p_{{ p }}" value="{{ value }}" autocomplete="off"/>
 					</div>
-					{% endfor %}
+				{% endfor %}
 					<br /><button id="btn_generate" name="generate">Generate SQL</button>
 				{% endif %}
 				{% if new_sql %}
-					<div class="new_sql">
-					<pre>{{ new_sql }}</pre>
-				</div>
+
+					<textarea id="fmt_sql" name="fmt_sql" rows=15 cols=80>{{ new_sql }}</textarea>
+					<button id="btn_copy" onclick="myFunction()">Copy Formatted SQL</button>
+
 			{% endif %}
 		</form>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.5.3/modernizr.min.js" type="text/javascript"></script>
+		<script>
+
+		document.querySelector("#btn_copy").addEventListener(
+			"click",
+			function(event) {
+				event.preventDefault();
+			},
+			false
+		);
+			function myFunction() {
+				/* Get the text field */
+				var copyText = document.getElementById("fmt_sql");
+
+				/* Select the text field */
+				copyText.select();
+				copyText.setSelectionRange(0, 99999);
+				/*For mobile devices*/
+				/* Copy the text inside the text field */
+
+				document.execCommand("copy");
+			}
+
+
+		</script>
 	</body>
 </html>
