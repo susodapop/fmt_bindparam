@@ -27,4 +27,4 @@ def get_parameter_names(txt:str) -> list:
 	# Taken directly from sqla Source Code
 	# /sqlalchemy/sql/elements.py#L1484
 	_bind_params_regex = re.compile(r"(?<![:\w\x5c]):(\w+)(?!:)", re.UNICODE)
-	return [i for i in re.findall(_bind_params_regex, txt)]
+	return [i for i in set([i for i in re.findall(_bind_params_regex, txt)])]
