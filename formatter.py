@@ -1,9 +1,11 @@
 import re, string
 
+class BindingException(Exception):
+	pass
 def fill_parameters(txt:str, params:dict) -> str:
 
 	if not all([i in get_parameter_names(txt) for i in params]):
-		raise Exception("Parameter input was not valid.")
+		raise BindingException("Parameter input was not valid.")
 	
 	def recursive_replace(params:dict, txt:str):
 
