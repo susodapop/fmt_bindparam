@@ -2,6 +2,7 @@ import re, string
 
 class BindingException(Exception):
 	pass
+
 def fill_parameters(txt:str, params:dict) -> str:
 
 	if not all([i in get_parameter_names(txt) for i in params]):
@@ -10,7 +11,7 @@ def fill_parameters(txt:str, params:dict) -> str:
 	def recursive_replace(params:dict, txt:str):
 
 		key = params.__iter__().__next__()
-		new_str = txt.replace(':%s' % key, params.get(key))
+		new_str = txt.replace(':%s' % key, "'%s'" % params.get(key))
 		params.pop(key)
 
 		if len(params) == 0:
