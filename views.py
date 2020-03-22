@@ -74,6 +74,13 @@ class WebView(MethodView):
 				new_sql = fill_parameters(txt, param_pairs)
 
 			else:
+				param_pairs = {}
 				new_sql = None
 
-			return render_template('fmt_bindparam/index.html', txt=txt, params=params, new_sql=new_sql)
+			return render_template(
+				'fmt_bindparam/index.html',
+				txt=txt,
+				params=params,
+				param_pairs=param_pairs,
+				new_sql=new_sql,
+				)
