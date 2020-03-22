@@ -1,5 +1,5 @@
 from flask.views import MethodView
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from .formatter import get_parameter_names, fill_parameters, BindingException
 
 
@@ -15,25 +15,25 @@ class FormatterView(MethodView):
 
 			try:
 				if self.txt is None:
-					return jsonify(dict(error="You must provide an argument called SQL."))
+					return jsonify(dict(error="You must provide an argument called SQL.")), 400
 			except:
-				return jsonify(dict(error="Could not decode JSON content in request."))
+				return jsonify(dict(error="Could not decode JSON content in request.")), 400
 
 			if len(self.parameters) == 0:
-				return jsonify(dict(message="Your SQL contains no parameter markers!"))
+				return jsonify(dict(error="Your SQL contains no parameter markers!")), 400
 
 			return f(self, *args, **kwargs)
 
 		return inner
 
 	@_error_checker
-	def get(self):
+	def post(self):
 		''' Returns a list of parameter markers from the provided query. '''
 		return jsonify(sql=self.txt, parameters=self.parameters)
 
 
 	@_error_checker
-	def post(self):
+	def put(self):
 		''' Returns a query with values inserted at each parameter marker. '''
 
 		try:
@@ -57,8 +57,8 @@ class FormatterView(MethodView):
 	def values(self):
 		return request.json.get('parameters', None)
 
+class WebView(MethodView):
 
+	def get(self):
 
-
-
-
+		return render_template('fmt_bindparam/index.html')
