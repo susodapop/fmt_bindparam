@@ -1,4 +1,4 @@
-import re, string
+import re, string, copy
 
 class BindingException(Exception):
 	pass
@@ -10,14 +10,15 @@ def fill_parameters(txt:str, params:dict) -> str:
 	
 	def recursive_replace(params:dict, txt:str):
 
-		key = params.__iter__().__next__()
-		new_str = txt.replace(':%s' % key, "'%s'" % params.get(key))
-		params.pop(key)
+		cpy_params = copy.deepcopy(params)
+		key = cpy_params.__iter__().__next__()
+		new_str = txt.replace(':%s' % key, "'%s'" % cpy_params.get(key))
+		cpy_params.pop(key)
 
-		if len(params) == 0:
+		if len(cpy_params) == 0:
 			return new_str
 		else:
-			return recursive_replace(params, new_str)
+			return recursive_replace(cpy_params, new_str)
 
 	return recursive_replace(params, txt)
 
