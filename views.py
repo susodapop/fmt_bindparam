@@ -62,3 +62,25 @@ class WebView(MethodView):
 	def get(self):
 
 		return render_template('fmt_bindparam/index.html')
+
+	def post(self):
+
+			txt = request.form.get('sql')
+			params = get_parameter_names(txt)
+
+			if request.form.get('generate') is not None:
+
+				param_pairs = {p: request.form.get(f"p_{p}") for p in params}
+				new_sql = fill_parameters(txt, param_pairs)
+
+			else:
+				param_pairs = {}
+				new_sql = None
+
+			return render_template(
+				'fmt_bindparam/index.html',
+				txt=txt,
+				params=params,
+				param_pairs=param_pairs,
+				new_sql=new_sql,
+				)

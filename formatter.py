@@ -1,4 +1,4 @@
-import re, string
+import re, string, copy
 
 class BindingException(Exception):
 	pass
@@ -7,6 +7,8 @@ def fill_parameters(txt:str, params:dict) -> str:
 
 	if not all([i in get_parameter_names(txt) for i in params]):
 		raise BindingException("Parameter input was not valid.")
+
+	cpy_params = copy.deepcopy(params)
 	
 	def recursive_replace(params:dict, txt:str):
 
@@ -19,7 +21,7 @@ def fill_parameters(txt:str, params:dict) -> str:
 		else:
 			return recursive_replace(params, new_str)
 
-	return recursive_replace(params, txt)
+	return recursive_replace(cpy_params, txt)
 
 
 def get_parameter_names(txt:str) -> list:
@@ -27,4 +29,4 @@ def get_parameter_names(txt:str) -> list:
 	# Taken directly from sqla Source Code
 	# /sqlalchemy/sql/elements.py#L1484
 	_bind_params_regex = re.compile(r"(?<![:\w\x5c]):(\w+)(?!:)", re.UNICODE)
-	return [i for i in re.findall(_bind_params_regex, txt)]
+	return [i for i in set([i for i in re.findall(_bind_params_regex, txt)])]
