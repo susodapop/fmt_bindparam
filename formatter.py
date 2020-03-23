@@ -13,15 +13,8 @@ def fill_parameters(txt:str, params:dict) -> str:
 	def recursive_replace(params:dict, txt:str):
 
 		key = params.__iter__().__next__()
-
-		wrapped_template = "'%s'"
-		unwrapped_template = "%s"
-
-		if params.get(key).get('wrap'):
-			new_str = txt.replace(':%s' % key, wrapped_template % params.get(key).get('value'))
-		else:
-			new_str = txt.replace(':%s' % key, unwrapped_template % params.get(key).get('value'))
-
+		wrap_template = "'%s'" if params.get(key).get('wrap') else "%s"
+		new_str = txt.replace(':%s' % key, wrap_template % params.get(key).get('value'))
 		params.pop(key)
 
 		if len(params) == 0:
