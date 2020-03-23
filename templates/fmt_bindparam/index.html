@@ -4,11 +4,12 @@
 		<meta charset="UTF-8">
 		<title>SQLA Bindparam Tool</title>
 		<style type="text/css">
+			body { font-family: Verdana; font-size: 10pt; }
 			#btn_find { color: white; background: #333; height: 3em; }
 			#btn_generate { color: black; background: green; height: 3em; }
 			#btn_copy { color: white; background: blue; height: 3em; }
 			#frm_main { width: 80%; max-width: 500px; margin: auto; display: flex; flex-flow: column nowrap; justify-content: center: align-items: center; }
-			.param_wrapper { margin: 1em auto; width: 80%; max-width: 300px; display: flex; flex-flow: row nowrap; justify-content: space-between; }
+			#param_table { width: 100%; text-align: center;}
 		</style>
 	</head>
 	<body>
@@ -18,13 +19,25 @@
 			<textarea name="sql" rows=15 cols=80>{{ txt }}</textarea><br />
 			<input type="submit" id="btn_find" value="Find Parameter Markers" />
 			{% if params %}
+			<table id="param_table">
+				<thead>
+					<tr>
+						<th>Parameter</th>
+						<th>Value</th>
+						<th>Wrap in quotes?</th>
+					</tr>
+				</thead>
+				<tbody>
 				{% for p in params %}
-				{% set value = param_pairs.get(p, '') %}
-					<div class="param_wrapper">
-						<label for="p_{{ p }}">{{ p }}</label>
-						<input type="text" name="p_{{ p }}" value="{{ value }}" autocomplete="off"/>
-					</div>
+				<tr>
+				{% set value = param_pairs.get(p, {'value': ''}) %}
+					<td><label for="p_{{ p }}">{{ p }}</label></td>
+					<td><input type="text" name="p_{{ p }}" value="{{ value.get('value') }}" autocomplete="off"/></td>
+					<td><input type="checkbox" name="p_{{ p }}_wrap" /></td>
+				</tr>
 				{% endfor %}
+			</tbody>
+		</table>
 					<br /><button id="btn_generate" name="generate">Generate SQL</button>
 				{% endif %}
 				{% if new_sql %}

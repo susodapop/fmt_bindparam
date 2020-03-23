@@ -70,7 +70,10 @@ class WebView(MethodView):
 
 			if request.form.get('generate') is not None:
 
-				param_pairs = {p: request.form.get(f"p_{p}") for p in params}
+				param_pairs = {p: 
+				{'value': request.form.get(f"p_{p}"), 'wrap': request.form.get(f'p_{p}_wrap') is not None }
+					for p in params}
+					
 				new_sql = fill_parameters(txt, param_pairs)
 
 			else:
